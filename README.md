@@ -75,22 +75,12 @@ flowchart TD
         }
     },
     "source": "https://example.com/google/sheet/source",
-    "public_fields": [
-        "updated_at",
-        "cycle_end",
-        "members"
-    ],
-    "members_public_fields": [
-        "active",
-        "hours_in_bank"
-    ],
-    "contains_private_data": true
 }
 ```
 
 #### Non anonymized JSON returned by [`scripts/get-members.json.py`](scripts/get-members.json.py)
 
-This is the same as the JSON returned by [`gscript/Code.js`](gscript/Code.js):
+This removes the `hours_in_bank` field from each member and set `contains_private_data` to `true`:
 
 ```json
 {
@@ -99,34 +89,24 @@ This is the same as the JSON returned by [`gscript/Code.js`](gscript/Code.js):
     "members": {
         "2": {
             "active": true,
-            "hours_in_bank": 6,
             "family_name": "Dupont",
             "first_name": "Alice",
             "phone": "+514 123 4567"
         },
         "3": {
             "active": false,
-            "hours_in_bank": -3,
             "family_name": "Smith",
             "first_name": "Bob",
             "phone": ""
         }
     },
-    "source": "https://example.com/google/sheet/source",
-    "public_fields": [
-        "updated_at",
-        "cycle_end",
-        "members"
-    ],
-    "members_public_fields": [
-        "active",
-        "hours_in_bank"
-    ],
     "contains_private_data": true
 }
 ```
 
 #### Anonymized JSON returned by [`scripts/get-members.json.py`](scripts/get-members.json.py)
+
+This just keeps the `active` and `hours_in_bank` fields from each member and set `contains_private_data` to `false`:
 
 ```json
 {
@@ -141,7 +121,8 @@ This is the same as the JSON returned by [`gscript/Code.js`](gscript/Code.js):
             "active": false,
             "hours_in_bank": -3,
         }
-    }
+    },
+    "contains_private_data": false
 }
 ```
 

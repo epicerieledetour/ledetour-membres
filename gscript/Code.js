@@ -1,4 +1,6 @@
 // CHANGELOG
+// - 3 Mar 2025 - remove fields public_fields, members_public_fields and contains_private_data
+//                now generated client side
 // - 7 Aug 2021 - indi and fam hours are now taken from "VRAI" columns AD and AE.
 // - 15 Nov 2019 - json now includes hours for all family members.
 
@@ -46,9 +48,6 @@ function makeTableObject(multiArray){
   tableObject.cycle_end = getCycleEndDate();
   tableObject.members = {};
   tableObject.source = MEMBER_LIST_URL;
-  tableObject.public_fields = ["updated_at", "cycle_end", "members"]
-  tableObject.members_public_fields = ["active", "hours_in_bank"];
-  tableObject.contains_private_data = true;
 
   multiArray.forEach(function(row, i){
 
