@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import copy
 import json
 import os
 import urllib.request
@@ -13,25 +14,36 @@ _DEFAULT_GOOGLE_SCRIPT_WEB_APP_URL = ""
 _DEFAULT_ANONYMIZED_PATH = "members-anonymized.json"
 _DEFAULT_NON_ANONYMIZED_PATH = "members-non-anonymized.json"
 
+_FIELDS_KEEP = {"updated_at", "cycle_end", "members"}
+_FIELDS_ANONYMIZED = {"active", "hours_in_bank"}
+_FIELDS_NON_ANONYMIZED = {"active", "family_name", "first_name", "phone"}
+
+def with_members_fields(data, fields, anonymized):
+    data = copy.deepcopy(data)
+
+    members = data.get("members", {})
+
+    for member in members.values():
+        filter_keys(member, fields)
+    
+    data["members"] = members
+    data["contains_private_data"] = not anonymized
+
+    return data
 
 def filter_keys(data: dict, keys_to_keep: list) -> dict:
     keys_to_pop = set(data.keys()) - set(keys_to_keep)
     for key in keys_to_pop:
         data.pop(key)
 
-
 def main(args):
     with urllib.request.urlopen(args.google_script_web_app_deployment_url) as fp:
         data = json.load(fp)
 
-    json.dump(data, args.non_anonymized_path)
+    filter_keys(data, _FIELDS_KEEP)
 
-    for member in data.get("members", []).values():
-        filter_keys(member, data.get("members_public_fields", []))
-
-    filter_keys(data, data.get("public_fields", []))
-
-    json.dump(data, args.anonymized_path)
+    json.dump(with_members_fields(data, _FIELDS_NON_ANONYMIZED, anonymized=False), args.non_anonymized_path)
+    json.dump(with_members_fields(data, _FIELDS_ANONYMIZED, anonymized=True), args.anonymized_path)
 
 
 if __name__ == "__main__":

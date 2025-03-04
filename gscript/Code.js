@@ -1,3 +1,9 @@
+// CHANGELOG
+// - 3 Mar 2025 - remove fields public_fields, members_public_fields and contains_private_data
+//                now generated client side
+// - 7 Aug 2021 - indi and fam hours are now taken from "VRAI" columns AD and AE.
+// - 15 Nov 2019 - json now includes hours for all family members.
+
 // Get Member List Url from library DetourTableauUrl
 // Library code: https://script.google.com/u/1/home/projects/1rLXj5KqFRmp91KFSI4wwViFda6-0vG4_QqYGAgWmk_ApYpAtnUv-4Hzr/edit
 const MEMBER_LIST_URL = DetourTableauUrl.loadUrlListeMembres();
@@ -42,9 +48,6 @@ function makeTableObject(multiArray){
   tableObject.cycle_end = getCycleEndDate();
   tableObject.members = {};
   tableObject.source = MEMBER_LIST_URL;
-  tableObject.public_fields = ["updated_at", "cycle_end", "members"]
-  tableObject.members_public_fields = ["active", "hours_in_bank"];
-  tableObject.contains_private_data = true;
 
   multiArray.forEach(function(row, i){
 

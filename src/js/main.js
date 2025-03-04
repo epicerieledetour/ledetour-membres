@@ -41,7 +41,6 @@
 
     if (format && options) el.innerText = date.toLocaleString(format, options)
     else el.innerText = date.toLocaleString()
-    
     return date
   }
 
@@ -85,7 +84,9 @@
     let phone = ""
     if (member) {
       status = member.active
-      hours = member.hours_in_bank
+      if (member.hours_in_bank !== undefined) {
+        hours = "(" + member.hours_in_bank + " heures)"
+      }
       phone = member.phone || ""
 
       const firstName = member.first_name
